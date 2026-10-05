@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: ftt-m5-bot
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: TELEGRAM_TOKEN
+        value: "8986756914:AAG2dj8r9RuT234iBNM98mUODSsiqY7Ti2w"
+      - key: TELEGRAM_CHAT_ID
+        value: "-5308046923"
+      - key: PRICE_CHANGE_THRESHOLD
+        value: "3.0"
+      - key: VOLUME_THRESHOLD
+        value: "200000.0"
+      - key: CHECK_INTERVAL_SECONDS
+        value: "5"
