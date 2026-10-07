@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Module quét và phân tích nến M5 từ Binance Spot API
-Phiên bản: 1.0.0
+Phiên bản: 1.1.1 (Hỗ trợ Fallback Endpoints, HTTP 451 Warning, Proxy)
 """
 
 import time
@@ -21,34 +21,58 @@ class BinanceScanner:
         self.price_threshold = config.PRICE_CHANGE_THRESHOLD
         self.volume_threshold = config.VOLUME_THRESHOLD
         
+        # Danh sách endpoint bao gồm URL chính và các fallback URLs
+        self.endpoints = [self.api_url]
+        for url in getattr(config, "BINANCE_FALLBACK_URLS", []):
+            if url not in self.endpoints:
+                self.endpoints.append(url)
+        self.current_endpoint_idx = 0
+
         # Tập hợp lưu open_time (ms) của các cây nến đã được xử lý để tránh trùng lặp
         self.processed_candles = set()
         
         # Session requests tái sử dụng kết nối
         self.session = requests.Session()
         self.session.headers.update({
-            "User-Agent": "FTT-M5-Scanner/1.0.0"
+            "User-Agent": f"FTT-M5-Scanner/{config.__version__}"
         })
+        if getattr(config, "PROXY", None):
+            self.session.proxies = {
+                "http": config.PROXY,
+                "https": config.PROXY
+            }
+            logger.info(f"Đã kích hoạt Proxy cho kết nối Binance: {config.PROXY}")
 
     def fetch_klines(self, limit: int = 5) -> Optional[List[list]]:
         """
         Lấy danh sách các cây nến gần nhất từ Binance Spot API.
+        Tự động luân chuyển fallback endpoint nếu gặp lỗi.
         """
         params = {
             "symbol": self.symbol,
             "interval": self.interval,
             "limit": limit
         }
-        try:
-            response = self.session.get(self.api_url, params=params, timeout=10)
-            if response.status_code == 200:
-                return response.json()
-            else:
-                logger.error(f"Lỗi API Binance: HTTP {response.status_code} - {response.text}")
-                return None
-        except requests.RequestException as e:
-            logger.error(f"Lỗi kết nối API Binance: {e}")
-            return None
+        num_endpoints = len(self.endpoints)
+        for attempt in range(num_endpoints):
+            idx = (self.current_endpoint_idx + attempt) % num_endpoints
+            url = self.endpoints[idx]
+            try:
+                response = self.session.get(url, params=params, timeout=10)
+                if response.status_code == 200:
+                    self.current_endpoint_idx = idx
+                    return response.json()
+                elif response.status_code == 451:
+                    logger.error(
+                        f"[LỖI ĐỊA LÝ HTTP 451] IP máy chủ ({url}) bị Binance chặn truy cập vì nằm trong khu vực hạn chế (Mỹ/Oregon). "
+                        f"Khắc phục: Đổi Region sang 'singapore' trong render.yaml hoặc thiết lập PROXY."
+                    )
+                else:
+                    logger.error(f"Lỗi API Binance ({url}): HTTP {response.status_code} - {response.text}")
+            except requests.RequestException as e:
+                logger.error(f"Lỗi kết nối API Binance ({url}): {e}")
+
+        return None
 
     def parse_kline(self, kline_raw: list) -> Dict:
         """

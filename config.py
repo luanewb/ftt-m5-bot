@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """
 Cấu hình cho Bot quét nến M5 FTTUSDT Binance Spot
-Phiên bản: 1.1.0 (Hỗ trợ Render.com & Chạy 24/7)
+Phiên bản: 1.1.1 (Khắc phục lỗi HTTP 451 & Hỗ trợ Region Singapore / Fallback URLs)
 """
 
 import os
 
 # Phiên bản phần mềm
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 
 # Telegram Bot Cấu hình (ưu tiên đọc từ biến môi trường trên Render)
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "8986756914:AAG2dj8r9RuT234iBNM98mUODSsiqY7Ti2w")
@@ -17,7 +17,16 @@ TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "-5308046923")
 SYMBOL = os.getenv("SYMBOL", "FTTUSDT")
 INTERVAL = os.getenv("INTERVAL", "5m")
 MARKET_TYPE = "SPOT"
-BINANCE_API_URL = "https://api.binance.com/api/v3/klines"
+BINANCE_API_URL = os.getenv("BINANCE_API_URL", "https://api.binance.com/api/v3/klines")
+BINANCE_FALLBACK_URLS = [
+    "https://api1.binance.com/api/v3/klines",
+    "https://api2.binance.com/api/v3/klines",
+    "https://api3.binance.com/api/v3/klines",
+    "https://data-api.binance.vision/api/v3/klines",
+]
+
+# Cấu hình Proxy (nếu cần vượt qua giới hạn IP)
+PROXY = os.getenv("HTTPS_PROXY", os.getenv("HTTP_PROXY", "")).strip()
 
 # Điều kiện kích hoạt cảnh báo
 PRICE_CHANGE_THRESHOLD = float(os.getenv("PRICE_CHANGE_THRESHOLD", 3.0))       # % tăng tối thiểu

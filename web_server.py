@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Web Server siêu nhẹ phục vụ Health Check & Keep-Alive 24/7 cho Render.com
-Phiên bản: 1.1.0
+Phiên bản: 1.1.1
 """
 
 import json

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Chương trình chính Bot Quét Nến M5 FTTUSDT Binance Spot
-Phiên bản: 1.1.0 (Hỗ trợ Render.com 24/7 & Web Health Check)
+Phiên bản: 1.1.1 (Khắc phục lỗi HTTP 451 & Tối ưu Render Singapore 24/7)
 """
 
 import sys

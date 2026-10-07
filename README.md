@@ -1,4 +1,4 @@
-# Bot Quét Nến M5 FTTUSDT (Binance Spot) - v1.1.0
+# Bot Quét Nến M5 FTTUSDT (Binance Spot) - v1.1.1
 
 Bot tự động giám sát cặp **FTTUSDT** trên thị trường **Binance Spot** ở khung thời gian **M5 (5 phút)**. Khi một cây nến M5 vừa kết thúc (đóng nến) thỏa mãn cả 2 điều kiện:
 1. **Giá tăng:** $\ge +3.0\%$ (tính từ giá Mở cửa đến giá Đóng cửa của cây nến).
@@ -12,12 +12,12 @@ Bot sẽ ngay lập tức gửi cảnh báo chi tiết về nhóm Telegram qua T
 
 | File | Mô tả |
 | :--- | :--- |
-| [config.py](file:///d:/app/FTT/config.py) | Quản lý cấu hình, biến môi trường (`os.getenv`), và phiên bản bot (`v1.1.0`). |
+| [config.py](file:///d:/app/FTT/config.py) | Quản lý cấu hình, biến môi trường (`os.getenv`), fallback URLs, và phiên bản bot (`v1.1.1`). |
 | [web_server.py](file:///d:/app/FTT/web_server.py) | Web Server HTTP siêu nhẹ phục vụ Health Check & Uptime Monitor cho Render.com. |
 | [telegram_notifier.py](file:///d:/app/FTT/telegram_notifier.py) | Xử lý định dạng HTML và gửi thông báo cảnh báo nến / khởi động tới Telegram. |
-| [binance_scanner.py](file:///d:/app/FTT/binance_scanner.py) | Lấy dữ liệu nến từ Binance Spot API, phân tích nến đóng và kiểm tra điều kiện kích hoạt. |
+| [binance_scanner.py](file:///d:/app/FTT/binance_scanner.py) | Lấy dữ liệu nến từ Binance Spot API, hỗ trợ Fallback Endpoints, cảnh báo HTTP 451 và Proxy. |
 | [main.py](file:///d:/app/FTT/main.py) | Vòng lặp chính quét liên tục, tích hợp Web Server, ghi log nến và nhịp tim. |
-| [render.yaml](file:///d:/app/FTT/render.yaml) & [Procfile](file:///d:/app/FTT/Procfile) | File cấu hình tự động triển khai trên Render.com Web Service. |
+| [render.yaml](file:///d:/app/FTT/render.yaml) & [Procfile](file:///d:/app/FTT/Procfile) | File cấu hình tự động triển khai trên Render.com Web Service (Region: Singapore). |
 | [run.bat](file:///d:/app/FTT/run.bat) | File thực thi nhanh 1-click trên hệ điều hành Windows. |
 | [requirements.txt](file:///d:/app/FTT/requirements.txt) | Danh sách thư viện Python cần thiết (`requests`). |
 
@@ -25,13 +25,22 @@ Bot sẽ ngay lập tức gửi cảnh báo chi tiết về nhóm Telegram qua T
 
 ## ☁️ Hướng Dẫn Triển Khai Lên Render.com Chạy 24/7 (Miễn Phí)
 
-### Bước 1: Tạo Web Service trên Render
+> ⚠️ **LƯU Ý CỰC KỲ QUAN TRỌNG VỀ REGION:**
+> Binance **chặn toàn bộ IP đến từ Hoa Kỳ** (gây lỗi `HTTP 451 - Service unavailable from a restricted location`).
+> Do đó, bắt buộc phải chọn **Region: Singapore** (hoặc Frankfurt), **tuyệt đối KHÔNG chọn Oregon hay Ohio (Mỹ)**!
+
+### Cách 1: Triển khai tự động qua Blueprint (Khuyên dùng)
+1. Đăng nhập vào [Render.com](https://dashboard.render.com/).
+2. Nhấn **New +** ➔ Chọn **Blueprint**.
+3. Chọn repo `luanewb/ftt-m5-bot`. Render sẽ tự động đọc file `render.yaml` (đã cấu hình sẵn `region: singapore`) và khởi chạy hoàn toàn tự động.
+
+### Cách 2: Tạo Web Service thủ công
 1. Đăng nhập vào [Render.com](https://dashboard.render.com/).
 2. Nhấn nút **New +** ở góc trên bên phải ➔ Chọn **Web Service**.
 3. Chọn kết nối với kho lưu trữ GitHub của bạn: `luanewb/ftt-m5-bot`.
 4. Điền các thông tin:
    * **Name:** `ftt-m5-bot` (hoặc tên bạn thích).
-   * **Region:** Singapore (hoặc Oregon/Frankfurt).
+   * **Region:** **Singapore** *(Bắt buộc chọn Singapore để tránh lỗi HTTP 451)*.
    * **Branch:** `main` (hoặc `master`).
    * **Runtime:** `Python 3`.
    * **Build Command:** `pip install -r requirements.txt`
