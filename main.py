@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Chương trình chính Bot Quét Nến M5 FTTUSDT Binance Spot
-Phiên bản: 1.1.2 (Chuyển sang Binance WebSocket Streams, chống dứt điểm lỗi IP Ban HTTP 418)
+Phiên bản: 1.1.3 (Hỗ trợ HEAD request UptimeRobot & Keep-Alive 24/7)
 """
 
 import sys

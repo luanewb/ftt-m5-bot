@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Web Server siêu nhẹ phục vụ Health Check & Keep-Alive 24/7 cho Render.com
-Phiên bản: 1.1.2
+Phiên bản: 1.1.3 (Hỗ trợ HEAD request cho UptimeRobot & Keep-Alive 24/7)
 """
 
 import json
@@ -23,6 +23,20 @@ bot_status = {
 }
 
 class HealthCheckHandler(BaseHTTPRequestHandler):
+    def do_HEAD(self):
+        """Xử lý HEAD request từ UptimeRobot để trả về 200 OK ngay lập tức."""
+        self.send_response(200)
+        if self.path in ("/status", "/json"):
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+        else:
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.end_headers()
+
+    def log_message(self, format, *args):
+        """Bỏ qua log bình thường để không tràn log từ các ping mỗi 5 phút của Uptime."""
+        if len(args) > 1 and str(args[1]).isdigit() and int(args[1]) >= 400:
+            logger.warning(f"Web Server cảnh báo: {args[0]} - {args[1]}")
+
     def do_GET(self):
         uptime = str(datetime.now() - bot_status["start_time"]).split(".")[0]
         

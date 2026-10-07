@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """
 Cấu hình cho Bot quét nến M5 FTTUSDT Binance Spot
-Phiên bản: 1.1.2 (Chuyển sang Binance WebSocket Streams, chống dứt điểm lỗi IP Ban HTTP 418)
+Phiên bản: 1.1.3 (Hỗ trợ HEAD request UptimeRobot & Keep-Alive 24/7)
 """
 
 import os
 
 # Phiên bản phần mềm
-__version__ = "1.1.2"
+__version__ = "1.1.3"
 
 # Telegram Bot Cấu hình (ưu tiên đọc từ biến môi trường trên Render)
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "8986756914:AAG2dj8r9RuT234iBNM98mUODSsiqY7Ti2w")

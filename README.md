@@ -1,4 +1,4 @@
-# Bot Quét Nến M5 FTTUSDT (Binance Spot) - v1.1.2
+# Bot Quét Nến M5 FTTUSDT (Binance Spot) - v1.1.3
 
 Bot tự động giám sát cặp **FTTUSDT** trên thị trường **Binance Spot** ở khung thời gian **M5 (5 phút)** qua kết nối trực tiếp **Binance WebSocket Stream** thời gian thực (Zero Rate-Limit, chống lỗi cấm IP HTTP 418). Khi một cây nến M5 vừa kết thúc (đóng nến) thỏa mãn cả 2 điều kiện:
 1. **Giá tăng:** $\ge +3.0\%$ (tính từ giá Mở cửa đến giá Đóng cửa của cây nến).
@@ -12,8 +12,8 @@ Bot sẽ ngay lập tức gửi cảnh báo chi tiết về nhóm Telegram qua T
 
 | File | Mô tả |
 | :--- | :--- |
-| [config.py](file:///d:/app/FTT/config.py) | Quản lý cấu hình, biến môi trường (`os.getenv`), URL WebSocket Stream và phiên bản bot (`v1.1.2`). |
-| [web_server.py](file:///d:/app/FTT/web_server.py) | Web Server HTTP siêu nhẹ phục vụ Health Check & Uptime Monitor cho Render.com. |
+| [config.py](file:///d:/app/FTT/config.py) | Quản lý cấu hình, biến môi trường (`os.getenv`), URL WebSocket Stream và phiên bản bot (`v1.1.3`). |
+| [web_server.py](file:///d:/app/FTT/web_server.py) | Web Server HTTP siêu nhẹ hỗ trợ HEAD/GET phục vụ Health Check & UptimeRobot Keep-Alive 24/7. |
 | [telegram_notifier.py](file:///d:/app/FTT/telegram_notifier.py) | Xử lý định dạng HTML và gửi thông báo cảnh báo nến / khởi động tới Telegram. |
 | [binance_scanner.py](file:///d:/app/FTT/binance_scanner.py) | Kết nối thời gian thực Binance WebSocket Stream, phát hiện nến đóng và kiểm tra điều kiện kích hoạt. |
 | [main.py](file:///d:/app/FTT/main.py) | Vòng lặp chính xử lý luồng WebSocket thời gian thực, tích hợp Web Server, ghi log nến và nhịp tim. |

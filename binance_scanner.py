@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Module quét và phân tích nến M5 từ Binance Spot qua WebSocket Stream thời gian thực
-Phiên bản: 1.1.2 (Chuyển sang Binance WebSocket Streams, khắc phục triệt để lỗi HTTP 418 IP Ban)
+Phiên bản: 1.1.3
 """
 
 import time
