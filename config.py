@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """
 Cấu hình cho Bot quét nến M5 FTTUSDT Binance Spot
-Phiên bản: 1.1.1 (Khắc phục lỗi HTTP 451 & Hỗ trợ Region Singapore / Fallback URLs)
+Phiên bản: 1.1.2 (Chuyển sang Binance WebSocket Streams, chống dứt điểm lỗi IP Ban HTTP 418)
 """
 
 import os
 
 # Phiên bản phần mềm
-__version__ = "1.1.1"
+__version__ = "1.1.2"
 
 # Telegram Bot Cấu hình (ưu tiên đọc từ biến môi trường trên Render)
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "8986756914:AAG2dj8r9RuT234iBNM98mUODSsiqY7Ti2w")
@@ -17,6 +17,15 @@ TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "-5308046923")
 SYMBOL = os.getenv("SYMBOL", "FTTUSDT")
 INTERVAL = os.getenv("INTERVAL", "5m")
 MARKET_TYPE = "SPOT"
+
+# Binance WebSocket Stream (Thời gian thực, không bị giới hạn Rate Limit HTTP 418/429)
+BINANCE_WS_URL = os.getenv("BINANCE_WS_URL", f"wss://stream.binance.com:9443/ws/{SYMBOL.lower()}@kline_{INTERVAL}")
+BINANCE_WS_FALLBACK_URLS = [
+    f"wss://data-stream.binance.vision/ws/{SYMBOL.lower()}@kline_{INTERVAL}",
+    f"wss://stream.binance.com:443/ws/{SYMBOL.lower()}@kline_{INTERVAL}"
+]
+
+# Binance REST API (Dự phòng)
 BINANCE_API_URL = os.getenv("BINANCE_API_URL", "https://api.binance.com/api/v3/klines")
 BINANCE_FALLBACK_URLS = [
     "https://api1.binance.com/api/v3/klines",

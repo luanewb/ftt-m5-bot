@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Module gửi thông báo qua Telegram Bot
-Phiên bản: 1.1.1
+Phiên bản: 1.1.2
 """
 
 import logging

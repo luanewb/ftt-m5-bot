@@ -1,6 +1,6 @@
-# Bot Quét Nến M5 FTTUSDT (Binance Spot) - v1.1.1
+# Bot Quét Nến M5 FTTUSDT (Binance Spot) - v1.1.2
 
-Bot tự động giám sát cặp **FTTUSDT** trên thị trường **Binance Spot** ở khung thời gian **M5 (5 phút)**. Khi một cây nến M5 vừa kết thúc (đóng nến) thỏa mãn cả 2 điều kiện:
+Bot tự động giám sát cặp **FTTUSDT** trên thị trường **Binance Spot** ở khung thời gian **M5 (5 phút)** qua kết nối trực tiếp **Binance WebSocket Stream** thời gian thực (Zero Rate-Limit, chống lỗi cấm IP HTTP 418). Khi một cây nến M5 vừa kết thúc (đóng nến) thỏa mãn cả 2 điều kiện:
 1. **Giá tăng:** $\ge +3.0\%$ (tính từ giá Mở cửa đến giá Đóng cửa của cây nến).
 2. **Khối lượng giao dịch:** $\ge 200,000\text{ FTT}$ (Base asset volume).
 
@@ -12,14 +12,14 @@ Bot sẽ ngay lập tức gửi cảnh báo chi tiết về nhóm Telegram qua T
 
 | File | Mô tả |
 | :--- | :--- |
-| [config.py](file:///d:/app/FTT/config.py) | Quản lý cấu hình, biến môi trường (`os.getenv`), fallback URLs, và phiên bản bot (`v1.1.1`). |
+| [config.py](file:///d:/app/FTT/config.py) | Quản lý cấu hình, biến môi trường (`os.getenv`), URL WebSocket Stream và phiên bản bot (`v1.1.2`). |
 | [web_server.py](file:///d:/app/FTT/web_server.py) | Web Server HTTP siêu nhẹ phục vụ Health Check & Uptime Monitor cho Render.com. |
 | [telegram_notifier.py](file:///d:/app/FTT/telegram_notifier.py) | Xử lý định dạng HTML và gửi thông báo cảnh báo nến / khởi động tới Telegram. |
-| [binance_scanner.py](file:///d:/app/FTT/binance_scanner.py) | Lấy dữ liệu nến từ Binance Spot API, hỗ trợ Fallback Endpoints, cảnh báo HTTP 451 và Proxy. |
-| [main.py](file:///d:/app/FTT/main.py) | Vòng lặp chính quét liên tục, tích hợp Web Server, ghi log nến và nhịp tim. |
+| [binance_scanner.py](file:///d:/app/FTT/binance_scanner.py) | Kết nối thời gian thực Binance WebSocket Stream, phát hiện nến đóng và kiểm tra điều kiện kích hoạt. |
+| [main.py](file:///d:/app/FTT/main.py) | Vòng lặp chính xử lý luồng WebSocket thời gian thực, tích hợp Web Server, ghi log nến và nhịp tim. |
 | [render.yaml](file:///d:/app/FTT/render.yaml) & [Procfile](file:///d:/app/FTT/Procfile) | File cấu hình tự động triển khai trên Render.com Web Service (Region: Singapore). |
 | [run.bat](file:///d:/app/FTT/run.bat) | File thực thi nhanh 1-click trên hệ điều hành Windows. |
-| [requirements.txt](file:///d:/app/FTT/requirements.txt) | Danh sách thư viện Python cần thiết (`requests`). |
+| [requirements.txt](file:///d:/app/FTT/requirements.txt) | Danh sách thư viện Python cần thiết (`requests`, `websockets`). |
 
 ---
 
